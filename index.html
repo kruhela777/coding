@@ -22,6 +22,147 @@
       transition: all 0.3s ease;
     }
 
+    .site-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: transparent;
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.site-header.scrolled {
+  background-color: #ffffff;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  transform: scale(1.01);
+}
+
+.header-container {
+  max-width: 1280px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+}
+
+.logo {
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 0.5px;
+  transition: transform 0.3s ease;
+}
+
+.logo:hover {
+  transform: scale(1.05);
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.3s ease;
+  color: white;
+}
+
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  height: 2px;
+  width: 0%;
+  background-color: var(--accent-color);
+  transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+.header-cta {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.sign-in {
+  background: none;
+  border: none;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.4rem 0.8rem;
+}
+
+.try-free {
+  background-color: white;
+  color: black;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.try-free:hover {
+  background-color: black;
+  color: white;
+  transform: scale(1.05);
+}
+
+/* Hamburger Icon */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.hamburger span {
+  height: 3px;
+  width: 25px;
+  background-color: #333;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .nav-links {
+    position: absolute;
+    top: 70px;
+    left: 0;
+    right: 0;
+    background-color: white;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1rem 2rem;
+    display: none;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  .nav-links.show {
+    display: flex;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .header-cta {
+    display: none;
+  }
+}
+
     .homepage {
       position: relative;
       height: 100vh;
@@ -95,7 +236,7 @@
     .report-graphics img,
     .dashboard-graphics img {
       position: absolute;
-      width: 220px;
+      width: 300px;
       border-radius: 12px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
       filter: blur(6px);
@@ -160,7 +301,7 @@
 
     .cta-btn {
       font-size: 1rem;
-      background: linear-gradient(to right, #60a5fa, #3b82f6);
+      background: linear-gradient(to right, #000000, #51555e);
       color: white;
       border: none;
       padding: 0.75rem 1.75rem;
@@ -252,6 +393,45 @@
     .meet-btn {
       display: none;
     }
+    .consolidation-graphics {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.consolidation-graphics img {
+  position: absolute;
+  width: 400px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  filter: blur(6px);
+  transform: scale(0.95);
+  opacity: 0;
+  transition: all 0.5s ease;
+  z-index: 2;
+}
+
+/* Positioning for consolidation images */
+.consolidation-graphics .img1 {
+  top: 25%;
+  left: 10%;
+}
+
+.consolidation-graphics .img2 {
+  bottom: 25%;
+  right: 10%;
+}
+
+/* Hover behavior */
+.highlight.consolidations:hover ~ .consolidation-graphics img,
+.consolidation-graphics:hover img {
+  filter: blur(0);
+  transform: scale(1);
+  opacity: 1;
+}
+
 
    .testimonials {
   position: relative;
@@ -390,6 +570,28 @@
 </head>
 <body>
 
+    <header class="site-header">
+  <div class="header-container">
+    <div class="logo">Insightify</div>
+
+    <nav class="nav-links" id="navMenu">
+      <a href="#features">Features</a>
+      <a href="#testimonials">Testimonials</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <div class="header-cta">
+      <button class="sign-in">Sign In</button>
+      <button class="try-free">Try Free</button>
+    </div>
+
+    <div class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</header>
+
   <section class="homepage">
     <video autoplay muted loop playsinline>
       <source src="homepage.mp4" type="video/mp4" />
@@ -402,7 +604,14 @@
       <h1>
         <span class="highlight reports">Create reports,</span>
         <span class="highlight dashboards">dashboards</span>
-        <span> & consolidations</span>
+        <span class="highlight consolidations"> & consolidations</span>
+
+<!-- Consolidation Images -->
+<div class="consolidation-graphics">
+  <img src="images/consolidate1.png" alt="Consolidation 1" class="img1">
+  <img src="images/consolidate2.png" alt="Consolidation 2" class="img2">
+</div>
+
 
         <!-- Report Images -->
         <div class="report-graphics">
@@ -584,6 +793,23 @@
 
   carousel.addEventListener('mouseleave', () => {
     isDragging = false;
+  });
+</script>
+
+<script>
+  // Toggle sticky header on scroll
+  window.addEventListener("scroll", () => {
+    const header = document.querySelector(".site-header");
+    header.classList.toggle("scrolled", window.scrollY > 10);
+  });
+
+  // Hamburger toggle
+  const hamburger = document.getElementById("hamburger");
+  const navMenu = document.getElementById("navMenu");
+
+  hamburger.addEventListener("click", () => {
+    navMenu.classList.toggle("show");
+    hamburger.classList.toggle("active");
   });
 </script>
 
