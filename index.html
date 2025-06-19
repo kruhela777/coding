@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Homepage + Customer Section</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-light: #ffffff;
+      --bg-dark: #0f0f0f;
+      --text-light: #111;
+      --text-dark: #fafafa;
+      --accent-color: #2563eb;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-light);
+      transition: all 0.3s ease;
+    }
+
+    .homepage {
+      position: relative;
+      height: 100vh;
+      overflow: hidden;
+      background: linear-gradient(to bottom, #00457C, #016599);
+    }
+
+    .homepage video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      opacity: 0.3;
+    }
+
+    .homepage-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      text-align: center;
+      padding: 2rem;
+      color: white;
+    }
+
+    .homepage-content .ratings {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      font-size: 1rem;
+    }
+
+    .homepage-content h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      margin: 0.5rem 0;
+      position: relative;
+      z-index: 2;
+    }
+
+    .homepage-content h1 span {
+      transition: opacity 0.3s ease;
+    }
+
+    .homepage-content h1:hover span:not(:hover) {
+      opacity: 0.2;
+    }
+
+    .highlight {
+      cursor: pointer;
+      position: relative;
+    }
+
+    .report-graphics,
+    .dashboard-graphics {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .report-graphics img,
+    .dashboard-graphics img {
+      position: absolute;
+      width: 220px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      filter: blur(6px);
+      transform: scale(0.95);
+      opacity: 0;
+      transition: all 0.5s ease;
+    }
+
+    /* Image positions for reports */
+    .report-graphics .img1 {
+      top: 10%;
+      left: 10%;
+    }
+    .report-graphics .img2 {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .report-graphics .img3 {
+      bottom: 10%;
+      right: 10%;
+    }
+
+    /* Image positions for dashboards */
+    .dashboard-graphics .img1 {
+      top: 15%;
+      left: 5%;
+    }
+
+    .dashboard-graphics .img2 {
+      bottom: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .dashboard-graphics .img3 {
+      top: 15%;
+      right: 5%;
+    }
+
+    /* Hover behavior */
+    .highlight.reports:hover ~ .report-graphics img,
+    .report-graphics:hover img {
+      filter: blur(0);
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    .highlight.dashboards:hover ~ .dashboard-graphics img,
+    .dashboard-graphics:hover img {
+      filter: blur(0);
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    .homepage-content p.subtext {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+      z-index: 2;
+      position: relative;
+    }
+
+    .cta-btn {
+      font-size: 1rem;
+      background: linear-gradient(to right, #60a5fa, #3b82f6);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.75rem;
+      border-radius: 999px;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      transition: background 0.3s ease;
+      position: relative;
+      z-index: 3;
+    }
+
+    .cta-btn:hover {
+      background: linear-gradient(to right, #3b82f6, #2563eb);
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: auto;
+      padding: 8rem 2rem;
+      text-align: center;
+    }
+
+    .title {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      color: var(--accent-color);
+      margin-bottom: 2.5rem;
+    }
+
+    .logos-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 500px;
+      overflow: hidden;
+      position: relative;
+      border-radius: 20px;
+      border: 1px solid #ccc;
+      margin-top: 150px;
+    }
+
+    .logos {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, auto);
+      gap: 2rem;
+      justify-items: center;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.8s ease;
+    }
+
+    .logos.active {
+      opacity: 1;
+      transform: translateY(0);
+      z-index: 1;
+    }
+
+    .logo {
+      max-width: 100px;
+      filter: grayscale(100%);
+      opacity: 0.7;
+      transition: all 0.3s ease;
+    }
+
+    #group2 .logo {
+      max-width: 160px;
+    }
+
+    .logo:hover {
+      filter: grayscale(0%);
+      opacity: 1;
+      transform: scale(1.05);
+    }
+
+    .meet-btn {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <section class="homepage">
+    <video autoplay muted loop playsinline>
+      <source src="homepage.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+    <div class="homepage-content">
+      <div class="ratings">
+        ⭐ 4.8 rating on Capterra ⭐ 4.8 rating on G2 ⭐ 350+ reviews on Xero ⭐ 550+ reviews on QuickBooks
+      </div>
+      <h1>
+        <span class="highlight reports">Create reports,</span>
+        <span class="highlight dashboards">dashboards</span>
+        <span> & consolidations</span>
+
+        <!-- Report Images -->
+        <div class="report-graphics">
+          <img src="images/report1.png" alt="Report 1" class="img1">
+          <img src="images/report2.png" alt="Report 2" class="img2">
+          <img src="images/report3.png" alt="Report 3" class="img3">
+        </div>
+
+        <!-- Dashboard Images -->
+        <div class="dashboard-graphics">
+          <img src="images/graph1.png" alt="Graph 1" class="img1">
+          <img src="images/graph2.png" alt="Graph 2" class="img2">
+          <img src="images/graph3.png" alt="Graph 3" class="img3">
+        </div>
+      </h1>
+      <p class="subtext">✨ Now with AI-insights</p>
+      <button class="cta-btn">Start 14-day free trial ›</button>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="title">Trusted by leading teams</div>
+    <div class="subtitle">The world’s most innovative companies use us</div>
+    <div class="logos-wrapper">
+      <div class="logos" id="group1">
+        <img class="logo" src="images/brex.png" alt="Brex">
+        <img class="logo" src="images/arc.png" alt="Arc">
+        <img class="logo" src="images/runway.png" alt="Runway">
+        <img class="logo" src="images/remote.png" alt="Remote">
+        <img class="logo" src="images/descript.png" alt="Descript">
+        <img class="logo" src="images/cursor.png" alt="Cursor">
+      </div>
+      <div class="logos" id="group2">
+        <img class="logo" src="images/perplexity.png" alt="Perplexity">
+        <img class="logo" src="images/raycast.png" alt="Raycast">
+        <img class="logo" src="images/supercell.png" alt="Supercell">
+        <img class="logo" src="images/retool.png" alt="Retool">
+        <img class="logo" src="images/mercury.png" alt="Mercury">
+        <img class="logo" src="images/monzo.png" alt="Monzo">
+      </div>
+      <div class="logos" id="group3">
+        <img class="logo" src="images/ramp.png" alt="Ramp">
+        <img class="logo" src="images/boom.png" alt="Boom">
+        <img class="logo" src="images/openai.png" alt="OpenAI">
+        <img class="logo" src="images/cashapp.png" alt="Cash App">
+        <img class="logo" src="images/scale.jpg" alt="Scale">
+        <img class="logo" src="images/vercel.png" alt="Vercel">
+      </div>
+      <button id="meetBtn" class="meet-btn">Meet our customers</button>
+    </div>
+  </div>
+
+  <script>
+    const groups = ["group1", "group2", "group3"];
+    let current = 0;
+
+    function showNextGroup() {
+      groups.forEach(id => {
+        document.getElementById(id).classList.remove('active');
+      });
+
+      document.getElementById("meetBtn").style.display = "none";
+
+      if (current < groups.length) {
+        document.getElementById(groups[current]).classList.add('active');
+        current++;
+      } else {
+        current = 0;
+        showNextGroup();
+        return;
+      }
+
+      setTimeout(showNextGroup, 3000);
+    }
+
+    window.onload = showNextGroup;
+  </script>
+</body>
+</html>
