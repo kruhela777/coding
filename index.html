@@ -236,9 +236,12 @@
       transition: all 0.3s ease;
     }
 
-    #group2 .logo {
-      max-width: 160px;
+    #group1 .logo,
+    #group2 .logo,
+    #group3 .logo {
+        max-width: 180px; /* or 200px depending on your design */
     }
+
 
     .logo:hover {
       filter: grayscale(0%);
@@ -249,6 +252,140 @@
     .meet-btn {
       display: none;
     }
+
+   .testimonials {
+  position: relative;
+  padding: 6rem 2rem;
+  background: #ffffff;
+  color: #111;
+  overflow: hidden;
+  text-align: center;
+}
+
+.testimonials video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.12;
+}
+
+.testimonials-content {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.testimonials-content h2 {
+  font-size: 2.25rem;
+  margin-bottom: 3rem;
+  font-weight: 700;
+  color: #111;
+}
+
+.testimonial-carousel {
+  position: relative;
+  max-width: 700px;
+  margin: 0 auto;
+  height: auto;
+  min-height: 230px;
+  width: 100%;
+  padding: 1rem; /* 🛠 Add padding to give cards room to grow */
+  box-sizing: border-box;
+  /* overflow: visible; */ /* Optionally allow overflow if hover effect still clipped */
+}
+
+.testimonial-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%; /* FIX: Let it inherit the width of .testimonial-carousel */
+  max-width: 100%; /* Ensure no overflow */
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  color: #222;
+  z-index: 0;
+  box-sizing: border-box;
+}
+
+
+.testimonial-card.active {
+  opacity: 1;
+  transform: scale(1);
+  z-index: 1;
+  border: 2px solid var(--accent, #2563eb);
+  box-shadow: 0 12px 30px rgba(37, 99, 235, 0.15);
+}
+
+.testimonial-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 16px 40px rgba(37, 99, 235, 0.25);
+  border-color: #2563eb;
+}
+
+.testimonial-card p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin-bottom: 1.25rem;
+  text-align: center;
+}
+
+.testimonial-card h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.testimonial-card h4 span {
+  margin-right: 0.5rem;
+  font-size: 1.25rem;
+}
+
+/* Dots */
+.carousel-dots {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  background-color: #2563eb;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  opacity: 0.5;
+}
+
+.dot:hover,
+.dot.active {
+  opacity: 1;
+  transform: scale(1.3);
+}
+
+@media (max-width: 768px) {
+  .testimonial-card {
+    font-size: 0.95rem;
+    padding: 1.5rem;
+  }
+
+  .testimonials-content h2 {
+    font-size: 1.75rem;
+  }
+}
+
   </style>
 </head>
 <body>
@@ -317,6 +454,35 @@
       <button id="meetBtn" class="meet-btn">Meet our customers</button>
     </div>
   </div>
+  <section class="testimonials">
+  <video autoplay muted loop playsinline>
+    <source src="testimonials.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+  <div class="testimonials-content">
+    <h2>What Our Customers Say</h2>
+    <div class="testimonial-carousel">
+      <div class="testimonial-card active" style="--accent: #60a5fa;">
+        <p>“Absolutely game-changing for our financial reports. The dashboard and AI-insights save us hours every week!”</p>
+        <h4><span>👩‍💼</span> Priya Sharma, <strong>CFO at FinEdge</strong></h4>
+      </div>
+      <div class="testimonial-card" style="--accent: #f472b6;">
+        <p>“The UI is clean, fast and exactly what our startup needed. A+ for performance and ease of use.”</p>
+        <h4><span>🧑‍💻</span> Ankit Verma, <strong>Product Manager at VaultOps</strong></h4>
+      </div>
+      <div class="testimonial-card" style="--accent: #34d399;">
+        <p>“Best decision we made for streamlining reporting. Easy integration and great customer support!”</p>
+        <h4><span>👩‍💻</span> Riya Jain, <strong>Founder at Growlytics</strong></h4>
+      </div>
+    </div>
+    <div class="carousel-dots">
+      <span class="dot active" onclick="showSlide(0)"></span>
+      <span class="dot" onclick="showSlide(1)"></span>
+      <span class="dot" onclick="showSlide(2)"></span>
+    </div>
+  </div>
+</section>
+
 
   <script>
     const groups = ["group1", "group2", "group3"];
@@ -343,5 +509,84 @@
 
     window.onload = showNextGroup;
   </script>
+  <script>
+  let currentTestimonial = 0;
+  const testimonials = document.querySelectorAll('.testimonial-card');
+  const dots = document.querySelectorAll('.dot');
+
+  function showSlide(index) {
+    testimonials.forEach((card, i) => {
+      card.classList.toggle('active', i === index);
+      dots[i].classList.toggle('active', i === index);
+    });
+    currentTestimonial = index;
+  }
+
+  function autoSlide() {
+    currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+    showSlide(currentTestimonial);
+  }
+
+  setInterval(autoSlide, 3000);
+
+  // Swipe/Drag functionality
+  const carousel = document.querySelector('.testimonial-carousel');
+  let startX = 0;
+  let isDragging = false;
+
+  // Touch events
+  carousel.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX;
+    isDragging = true;
+  });
+
+  carousel.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    const deltaX = e.touches[0].clientX - startX;
+    if (Math.abs(deltaX) > 50) {
+      isDragging = false;
+      if (deltaX < 0) {
+        currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+      } else {
+        currentTestimonial = (currentTestimonial - 1 + testimonials.length) % testimonials.length;
+      }
+      showSlide(currentTestimonial);
+    }
+  });
+
+  carousel.addEventListener('touchend', () => {
+    isDragging = false;
+  });
+
+  // Mouse drag support (optional)
+  carousel.addEventListener('mousedown', (e) => {
+    startX = e.clientX;
+    isDragging = true;
+  });
+
+  carousel.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    const deltaX = e.clientX - startX;
+    if (Math.abs(deltaX) > 50) {
+      isDragging = false;
+      if (deltaX < 0) {
+        currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+      } else {
+        currentTestimonial = (currentTestimonial - 1 + testimonials.length) % testimonials.length;
+      }
+      showSlide(currentTestimonial);
+    }
+  });
+
+  carousel.addEventListener('mouseup', () => {
+    isDragging = false;
+  });
+
+  carousel.addEventListener('mouseleave', () => {
+    isDragging = false;
+  });
+</script>
+
+
 </body>
 </html>
